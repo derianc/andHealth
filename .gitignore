@@ -1,0 +1,57 @@
+# Flutter/Dart/Pub related
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+flutter_*.png
+generated_plugin_registrant.dart
+
+# IntelliJ/Android Studio
+*.iml
+*.ipr
+*.iws
+.idea/
+android/.gradle/
+android/captures/
+android/app/debug
+android/app/profile
+android/app/release
+
+# VS Code
+.vscode/
+
+# iOS
+ios/Flutter/.last_build_id
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+ios/Runner.xcworkspace/
+*.xcuserstate
+*.xcscmblueprint
+
+# macOS
+macos/Flutter/ephemeral/
+macos/Pods/
+macos/Runner/GeneratedPluginRegistrant.swift
+
+# Windows
+windows/flutter/ephemeral/
+
+# Web
+lib/generated_plugin_registrant.dart
+
+# Firebase/Secrets
+lib/firebase_options.dart
+google-services.json
+GoogleService-Info.plist
+
+# Others
+*.lock
+*.log
+*.tmp
+*.swp
+*.DS_Store
