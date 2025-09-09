@@ -78,7 +78,6 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text("My Prescriptions"),
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
