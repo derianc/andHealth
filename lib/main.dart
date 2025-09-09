@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Auth Demo',
+      title: 'AndHealth Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const SplashScreen(), // entry point
     );

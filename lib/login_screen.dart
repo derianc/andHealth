@@ -1,7 +1,7 @@
+import 'package:andhealth/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:andhealth/services/auth_service.dart';
-import 'home_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class LoginScreen extends StatefulWidget {
