@@ -1,10 +1,10 @@
+import 'package:andhealth/home_screen.dart';
 import 'package:andhealth/models/user_model.dart';
 import 'package:andhealth/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 
-import 'home_screen.dart';
 import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {

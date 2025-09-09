@@ -1,7 +1,10 @@
-import 'package:andhealth/add_prescription_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+
+// Import your pages
+import 'prescriptions_screen.dart';
+import 'calendar_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,167 +14,48 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _showActive = true;
-  bool _showInactive = false;
+  int _currentIndex = 0;
 
-  void _showFabOptions() {
-    showModalBottomSheet(
-      context: context,
-      builder: (ctx) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.qr_code_scanner),
-                title: const Text("Scan Prescription"),
-                onTap: () {
-                  Navigator.pop(ctx);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.edit_note),
-                title: const Text("Enter Prescription Manually"),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AddPrescriptionPage(),
-                    ),
-                  ).then((saved) {
-                    if (saved == true) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Prescription added successfully"),
-                        ),
-                      );
-                    }
-                  });
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  final List<Widget> _pages = const [
+    CalendarScreen(),
+    PrescriptionsScreen(),
+    ProfileScreen(),
+  ];
 
-  Widget _buildSection(
-    String title,
-    List<DocumentSnapshot> docs,
-    bool isExpanded,
-    VoidCallback toggle,
-  ) {
-    return Card(
-      color: Colors.white.withOpacity(0.9),
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      child: ExpansionTile(
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        initiallyExpanded: isExpanded,
-        onExpansionChanged: (_) => toggle(),
-        children: docs.map((doc) {
-          final data = doc.data() as Map<String, dynamic>? ?? {};
-          final name = data['name'] as String? ?? "Unnamed";
-
-          return ListTile(
-            title: Text(name),
-            trailing: IconButton(
-              icon: const Icon(Icons.edit, color: Colors.deepPurple),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        AddPrescriptionPage(prescription: doc),
-                  ),
-                ).then((saved) {
-                  if (saved == true) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Prescription updated successfully"),
-                      ),
-                    );
-                  }
-                });
-              },
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
+  final List<String> _titles = const [
+    "Calendar",
+    "Prescriptions",
+    "Profile",
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFF0F2027), // dark blue-gray
-            Color(0xFF203A43), // slate blue
-            Color(0xFF2C5364), // teal-blue
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          _titles[_currentIndex],
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Colors.blueAccent,
+        elevation: 0,
       ),
-      child: Scaffold(
+      extendBody: true,
+      body: _pages[_currentIndex],
+      bottomNavigationBar: CurvedNavigationBar(
+        index: _currentIndex,
+        height: 60,
         backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: const Text("My Prescriptions"),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection("prescriptions")
-              .where("userId", isEqualTo: user?.uid)
-              .orderBy("createdAt", descending: true)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-              return const Center(child: Text("No prescriptions found"));
-            }
-
-            // Split into active / inactive (keep docs, not just names)
-            final activeDocs = snapshot.data!.docs
-                .where((doc) => (doc['isActive'] ?? true) == true)
-                .toList();
-
-            final inactiveDocs = snapshot.data!.docs
-                .where((doc) => (doc['isActive'] ?? true) == false)
-                .toList();
-
-            return ListView(
-              children: [
-                _buildSection(
-                  "Active Prescriptions",
-                  activeDocs,
-                  _showActive,
-                  () => setState(() => _showActive = !_showActive),
-                ),
-                _buildSection(
-                  "Inactive Prescriptions",
-                  inactiveDocs,
-                  _showInactive,
-                  () => setState(() => _showInactive = !_showInactive),
-                ),
-              ],
-            );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _showFabOptions,
-          backgroundColor: Colors.deepPurple,
-          child: const Icon(Icons.add),
-        ),
+        color: Colors.blueAccent,
+        buttonBackgroundColor: Colors.white,
+        animationDuration: const Duration(milliseconds: 300),
+        items: const [
+          Icon(Icons.medical_services, size: 30, color: Colors.white),
+          Icon(Icons.calendar_today, size: 30, color: Colors.white),
+          Icon(Icons.person, size: 30, color: Colors.white),
+        ],
+        onTap: (index) {
+          setState(() => _currentIndex = index);
+        },
       ),
     );
   }
