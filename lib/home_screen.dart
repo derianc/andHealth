@@ -49,8 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
         buttonBackgroundColor: Colors.white,
         animationDuration: const Duration(milliseconds: 300),
         items: const [
-          Icon(Icons.medical_services, size: 30, color: Colors.white),
           Icon(Icons.calendar_today, size: 30, color: Colors.white),
+          Icon(Icons.medical_services, size: 30, color: Colors.white),
           Icon(Icons.person, size: 30, color: Colors.white),
         ],
         onTap: (index) {

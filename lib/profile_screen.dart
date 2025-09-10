@@ -52,13 +52,14 @@ class ProfileScreen extends StatelessWidget {
             SafeArea(
               child: OutlinedButton.icon(
                 onPressed: () async {
+                  final rootNav = Navigator.of(context, rootNavigator: true);
+                  
                   await AuthService().signOut();
                   userProvider.logout();
 
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/login',
-                    (Route<dynamic> route) => false,
-                  );
+                   WidgetsBinding.instance.addPostFrameCallback((_) {
+                    rootNav.pushNamedAndRemoveUntil('/login', (route) => false);
+                  });
                 },
                 icon: const Icon(Icons.logout, color: Colors.red),
                 label: const Text(
@@ -72,18 +73,9 @@ class ProfileScreen extends StatelessWidget {
                         color: Colors.red,
                         width: 1.5,
                         style: BorderStyle
-                            .solid, // Flutter doesn't support dotted natively
+                            .solid, 
                       ),
-                    ).copyWith(
-                      // 👇 Hacky way to simulate dotted by using dashed border in decoration
-                      side: MaterialStateProperty.all(
-                        const BorderSide(
-                          color: Colors.red,
-                          width: 1.5,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                    ),
+                    )
               ),
             ),
 
