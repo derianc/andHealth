@@ -96,21 +96,39 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
         ),
         const Divider(),
-        Expanded(
+       Expanded(
           child: ListView(
-            children: (events[DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)] ?? [])
-                .map(
-                  (e) => ListTile(
-                    leading: const Icon(Icons.access_time, color: Colors.blue),
-                    title: Text(
-                      "${e.time.hour.toString().padLeft(2, '0')}:${e.time.minute.toString().padLeft(2, '0')}",
-                    ),
-                    subtitle: Text("Take ${e.names.join(', ')} Medication"),
-                  ),
-                )
-                .toList(),
+            children:
+                (events[DateTime(
+                          _selectedDay.year,
+                          _selectedDay.month,
+                          _selectedDay.day,
+                        )] ??
+                        [])
+                    .map(
+                      (e) => ListTile(
+                        leading: const Icon(
+                          Icons.access_time,
+                          color: Colors.blue,
+                        ),
+                        title: Text(
+                          "${e.time.hour.toString().padLeft(2, '0')}:${e.time.minute.toString().padLeft(2, '0')}",
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Take Medications:",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            ...e.names.map((name) => Text(" • $name")),
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
           ),
-        ),
+        )
       ],
     );
   }

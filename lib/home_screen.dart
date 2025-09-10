@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-
-// Import your pages
 import 'prescriptions_screen.dart';
 import 'calendar_screen.dart';
 import 'profile_screen.dart';
@@ -17,14 +15,14 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = const [
-    CalendarScreen(),
     PrescriptionsScreen(),
+    CalendarScreen(),
     ProfileScreen(),
   ];
 
   final List<String> _titles = const [
-    "Calendar",
     "Prescriptions",
+    "Calendar",
     "Profile",
   ];
 
@@ -49,8 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
         buttonBackgroundColor: Colors.white,
         animationDuration: const Duration(milliseconds: 300),
         items: const [
-          Icon(Icons.calendar_today, size: 30, color: Colors.white),
           Icon(Icons.medical_services, size: 30, color: Colors.white),
+          Icon(Icons.calendar_today, size: 30, color: Colors.white),
           Icon(Icons.person, size: 30, color: Colors.white),
         ],
         onTap: (index) {

@@ -15,20 +15,21 @@ void main() async {
   // Load .env BEFORE using it
   await dotenv.load(fileName: ".env");
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
- 
- final apiKey = dotenv.env['OPENAI_API_KEY'];
+  // initialize firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // initialize openAI
+  final apiKey = dotenv.env['OPENAI_API_KEY'];
   if (apiKey == null || apiKey.isEmpty) {
-   print("⚠️ OPENAI_API_KEY is not set in .env file");
-   return;
+    print("⚠️ OPENAI_API_KEY is not set in .env file");
+    return;
   } else {
     OpenAI.apiKey = apiKey;
   }
-   
+
+  // set global user and prescription providers
   runApp(
-     MultiProvider(
+    MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => PrescriptionProvider()),
@@ -41,12 +42,13 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // route to splash screen
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'AndHealth Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const SplashScreen(), // entry point
+      home: const SplashScreen(),
     );
   }
 }

@@ -33,11 +33,15 @@ class _SplashScreenState extends State<SplashScreen>
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
+    // check for logged in user
     _checkUser();
   }
 
+  // check userProvider for existing user session
+  // send to home screen if session exists.
+  // else send to login screen
   Future<void> _checkUser() async {
-    await Future.delayed(const Duration(seconds: 3)); // show splash for 2s
+    await Future.delayed(const Duration(seconds: 3));
 
     final fb.User? fbUser = fb.FirebaseAuth.instance.currentUser;
 
@@ -79,9 +83,9 @@ class _SplashScreenState extends State<SplashScreen>
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF0F2027), // dark blue-gray
-              Color(0xFF203A43), // slate blue
-              Color(0xFF2C5364), // teal-blue
+              Color(0xFF0F2027), 
+              Color(0xFF203A43), 
+              Color(0xFF2C5364), 
             ],
           ),
         ),
@@ -89,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen>
           child: ScaleTransition(
             scale: _scaleAnimation,
             child: Image.asset(
-              'assets/AndHealth_Splash.png', // put your splash logo in assets
+              'assets/AndHealth_Splash.png',
               width: 120,
               height: 120,
             ),

@@ -4,7 +4,7 @@ import 'package:andhealth/models/prescription_model.dart';
 import 'package:dart_openai/dart_openai.dart';
 
 class PrescriptionScheduleService {
-  
+
   Future<Map<DateTime, List<MedicationEvent>>> getCalendarEvents(
     List<Prescription> prescriptions,
   ) async {
@@ -30,6 +30,7 @@ class PrescriptionScheduleService {
           hour,
           minute,
         );
+
         final key = DateTime(today.year, today.month, today.day);
 
         // collapse meds with same time
@@ -57,6 +58,7 @@ class PrescriptionScheduleService {
     return events;
   }
 
+
   Future<Map<String, dynamic>> _parseFrequencyWithOpenAI(
     String frequency,
   ) async {
@@ -77,7 +79,8 @@ class PrescriptionScheduleService {
           role: OpenAIChatMessageRole.user,
           content: [
             OpenAIChatCompletionChoiceMessageContentItemModel.text(
-              "Frequency: $frequency. Return JSON with fields: timesPerDay, intervalHours, suggestedTimes (24h HH:mm format).",
+              "Frequency: $frequency. Return JSON with fields: timesPerDay, intervalHours, suggestedTimes (24h HH:mm format). "
+              "Always start the first dose at 07:00, and space the remaining doses evenly across the day."
             ),
           ],
         ),

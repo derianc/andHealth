@@ -54,9 +54,9 @@ class _LoginScreenState extends State<LoginScreen> {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color(0xFF0F2027), // dark blue-gray
-            Color(0xFF203A43), // slate blue
-            Color(0xFF2C5364), // teal-blue
+            Color(0xFF0F2027), 
+            Color(0xFF203A43), 
+            Color(0xFF2C5364), 
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -72,15 +72,13 @@ class _LoginScreenState extends State<LoginScreen> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Company Logo
                 Image.asset(
                   "assets/AndHealth.png",
                   height: 120,
                 ),
                 const SizedBox(height: 24),
-                // Text below logo
                 const Text(
-                  "Welcome to AndHealth\nYour partner in better health outcomes",
+                  "Personalized, evidence-based care from\nproviders who meet you where you are.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
@@ -90,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 40),
 
-                // Divider for social login
+                // login divider
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: Row(
@@ -134,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
 
-            // Footer pinned at bottom
+            // Version footer
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: Text(

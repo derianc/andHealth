@@ -33,7 +33,7 @@ class AuthService {
           photoUrl: user.photoURL ?? '',
         );
 
-        Provider.of<UserProvider>(context, listen: false).setUser(userModel);
+        Provider.of<UserProvider>(context, listen: true).setUser(userModel);
 
         // Navigate to home
         Navigator.pushReplacementNamed(context, '/home');

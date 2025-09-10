@@ -1,3 +1,4 @@
+import 'package:andhealth/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -57,9 +58,10 @@ class ProfileScreen extends StatelessWidget {
                   await AuthService().signOut();
                   userProvider.logout();
 
-                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    rootNav.pushNamedAndRemoveUntil('/login', (route) => false);
-                  });
+                   Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  );
                 },
                 icon: const Icon(Icons.logout, color: Colors.red),
                 label: const Text(
