@@ -55,3 +55,5 @@ GoogleService-Info.plist
 *.tmp
 *.swp
 *.DS_Store
+.env
+.env.*
