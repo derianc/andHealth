@@ -28,7 +28,13 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app requires camera access to scan prescriptions.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires access to your photo library to select prescription images.</string>
 	<key>UISupportedInterfaceOrientations</key>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app requires access to save prescription images to your photo library.</string>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
