@@ -1,5 +1,6 @@
 // lib/prescriptions_screen.dart
 import 'package:andhealth/models/prescription_model.dart';
+import 'package:andhealth/prescription_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -278,8 +279,10 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
           Expanded(
             child: OutlinedButton.icon(
               onPressed: () {
-                // TODO: Navigate to your scanner flow
-                // Navigator.pushNamed(context, '/scanPrescription');
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ScanScreen()),
+                );
               },
               icon: const Icon(Icons.qr_code_scanner),
               label: const Text('Scan Prescription'),
