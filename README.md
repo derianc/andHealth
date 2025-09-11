@@ -29,14 +29,14 @@ dart pub global activate flutterfire_cli
 OPENAI_API_KEY=your_openai_key_if_using
 
 ### 4. Project Structure
-lib/
- ├─ models/          # Data models (UserModel, PrescriptionModel, etc.)
- ├─ providers/       # State management with Provider
- ├─ services/        # Firebase/Auth/AI services
- ├─ screens/         # App screens (Login, Profile, Prescriptions, Scan)
- ├─ widgets/         # Shared UI components
+- lib/
+ - ├─ models/          # Data models (UserModel, PrescriptionModel, etc.)
+ - ├─ providers/       # State management with Provider
+ - ├─ services/        # Firebase/Auth/AI services
+ - ├─ screens/         # App screens (Login, Profile, Prescriptions, Scan)
+ - ├─ widgets/         # Shared UI components
 
 ### 4. Run Project
-flutter pub get
-flutter run
+- flutter pub get
+- flutter run
 
