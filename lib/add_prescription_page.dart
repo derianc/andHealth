@@ -1,6 +1,8 @@
+import 'package:andhealth/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class AddPrescriptionPage extends StatefulWidget {
   final DocumentSnapshot? prescription; // optional for edit
@@ -36,8 +38,7 @@ class _AddPrescriptionPageState extends State<AddPrescriptionPage> {
     setState(() => _isSaving = true);
 
     try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) throw Exception("Not signed in");
+      final user = context.read<UserProvider>().user;
 
       if (widget.prescription == null) {
         // 🔹 Create new
@@ -47,7 +48,7 @@ class _AddPrescriptionPageState extends State<AddPrescriptionPage> {
           "frequency": _frequencyController.text.trim(),
           "createdAt": FieldValue.serverTimestamp(),
           "isActive": true,
-          "userId": user.uid,
+          "userId": user?.id
         });
       } else {
         // 🔹 Update existing
