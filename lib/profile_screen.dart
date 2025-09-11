@@ -1,4 +1,5 @@
 import 'package:andhealth/login_screen.dart';
+import 'package:andhealth/providers/prescription_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +12,8 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final prescriptionProvider = Provider.of<PrescriptionProvider>(context);
+    
     final user = userProvider.user;
 
     return Scaffold(
@@ -57,6 +60,7 @@ class ProfileScreen extends StatelessWidget {
                   
                   await AuthService().signOut();
                   userProvider.logout();
+                  prescriptionProvider.clear();
 
                    Navigator.pushReplacement(
                     context,

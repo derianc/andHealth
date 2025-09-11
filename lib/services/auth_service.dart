@@ -1,3 +1,4 @@
+import 'package:andhealth/home_screen.dart';
 import 'package:andhealth/models/user_model.dart';
 import 'package:andhealth/providers/user_provider.dart';
 
@@ -47,7 +48,10 @@ class AuthService {
       Provider.of<UserProvider>(context, listen: false).setUser(userModel);
 
       // Navigate to home
-      Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
     }
   } catch (e) {
     print("❌ Google Sign-In error: $e");

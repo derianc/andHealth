@@ -1,6 +1,7 @@
 // lib/prescriptions_screen.dart
 import 'package:andhealth/models/prescription_model.dart';
 import 'package:andhealth/prescription_scan.dart';
+import 'package:andhealth/widgets/TopActions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -270,37 +271,6 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
     );
   }
 
-  // ——— Top action buttons (Scan / Enter manually) ———
-  Widget _topActions() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
-      child: Row(
-        children: [
-          Expanded(
-            child: OutlinedButton.icon(
-              onPressed: () {
-                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ScanScreen()),
-                );
-              },
-              icon: const Icon(Icons.qr_code_scanner),
-              label: const Text('Scan Prescription'),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: FilledButton.icon(
-              onPressed: _openAddSheet,
-              icon: const Icon(Icons.edit_note),
-              label: const Text('Enter Manually'),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final pp = context.watch<PrescriptionProvider>();
@@ -315,7 +285,15 @@ class _PrescriptionsScreenState extends State<PrescriptionsScreen> {
               onRefresh: _refresh,
               child: ListView(
                 children: [
-                  _topActions(), // ← moved actions to the top
+                  TopActions(
+                    onScan: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const ScanScreen()),
+                      );
+                    },
+                    onEnterManual: _openAddSheet,
+                  ), // ← moved actions to the top
                   _buildSection(
                     context: context,
                     title: 'Active Prescriptions',
