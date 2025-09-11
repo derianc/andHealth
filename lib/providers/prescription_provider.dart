@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'package:andhealth/models/prescription_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:flutter/foundation.dart';
 import '../models/medication_event.dart';
 import '../services/PrescriptionScheduleService.dart';
@@ -65,7 +66,20 @@ class PrescriptionProvider extends ChangeNotifier {
 
     _isBuildingEvents = true;
     notifyListeners();
-    final built = await _schedule.getCalendarEvents(_prescriptions);
+
+final fbUser = fb.FirebaseAuth.instance.currentUser;
+      final doc = await FirebaseFirestore.instance
+        .collection("profiles")
+        .doc(fbUser?.uid)
+        .get();
+
+    // Default to 7:00 if not found
+    String startOfDayStr = "07:00";
+    if (doc.exists && doc.data()?["startOfDay"] != null) {
+      startOfDayStr = doc["startOfDay"];
+    }
+
+    final built = await _schedule.getCalendarEvents(_prescriptions, startOfDayStr);
     _events = built;
     _eventsSignature = sig;
     _eventsBuilt = true;

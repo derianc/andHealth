@@ -1,6 +1,7 @@
 import 'package:andhealth/home_screen.dart';
 import 'package:andhealth/models/user_model.dart';
 import 'package:andhealth/providers/user_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
@@ -48,14 +49,32 @@ class _SplashScreenState extends State<SplashScreen>
     if (!mounted) return;
 
     if (fbUser != null) {
-      Provider.of<UserProvider>(context, listen: false).setUser(
-        UserModel(
+      final doc = await FirebaseFirestore.instance
+          .collection("profiles")
+          .doc(fbUser.uid)
+          .get();
+
+      UserModel userModel;
+
+      if (doc.exists) {
+        userModel = UserModel.fromFirestore(doc.data()!, doc.id);
+      } else {
+        // Create default profile if not in Firestore yet
+        userModel = UserModel(
           id: fbUser.uid,
           email: fbUser.email ?? '',
           displayName: fbUser.displayName ?? '',
           photoUrl: fbUser.photoURL ?? '',
-        ),
-      );
+          startOfDay: const TimeOfDay(hour: 7, minute: 0),
+        );
+        await FirebaseFirestore.instance
+            .collection("profiles")
+            .doc(fbUser.uid)
+            .set(userModel.toFirestore());
+      }
+
+      Provider.of<UserProvider>(context, listen: false).setUser(userModel);
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
@@ -67,6 +86,7 @@ class _SplashScreenState extends State<SplashScreen>
       );
     }
   }
+
 
   @override
   void dispose() {

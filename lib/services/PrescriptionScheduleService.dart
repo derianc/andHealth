@@ -7,6 +7,7 @@ class PrescriptionScheduleService {
 
   Future<Map<DateTime, List<MedicationEvent>>> getCalendarEvents(
     List<Prescription> prescriptions,
+    String startOfDay
   ) async {
     final Map<DateTime, List<MedicationEvent>> events = {};
     final today = DateTime.now();
@@ -15,7 +16,7 @@ class PrescriptionScheduleService {
       final frequency = p.frequency;
       final name = p.name;
 
-      final parsed = await _parseFrequencyWithOpenAI(frequency);
+      final parsed = await _parseFrequencyWithOpenAI(frequency, startOfDay);
       final times = parsed["suggestedTimes"]?.cast<String>() ?? [];
 
       for (var t in times) {
@@ -61,6 +62,7 @@ class PrescriptionScheduleService {
 
   Future<Map<String, dynamic>> _parseFrequencyWithOpenAI(
     String frequency,
+    String startOfDay
   ) async {
     print("🤖 Sending to OpenAI: $frequency");
 
@@ -80,7 +82,7 @@ class PrescriptionScheduleService {
           content: [
             OpenAIChatCompletionChoiceMessageContentItemModel.text(
               "Frequency: $frequency. Return JSON with fields: timesPerDay, intervalHours, suggestedTimes (24h HH:mm format). "
-              "Always start the first dose at 07:00, and space the remaining doses evenly across the day."
+              "Always start the first dose at $startOfDay, and space the remaining doses evenly across the day."
             ),
           ],
         ),

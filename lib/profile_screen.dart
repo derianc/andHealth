@@ -8,6 +8,18 @@ import 'providers/user_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
+  
+
+  Future<void> _pickStartOfDay(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: userProvider.startOfDay,
+    );
+    if (picked != null) {
+      userProvider.setStartOfDay(picked);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +64,19 @@ class ProfileScreen extends StatelessWidget {
                 color: Colors.grey,
               ),
             ),
+
+            // start day
+            ListTile(
+              leading: const Icon(Icons.access_time),
+              title: const Text("Start of Day"),
+              subtitle: Text(userProvider.startOfDay.format(context)),
+              trailing: IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () => _pickStartOfDay(context),
+              ),
+            ),
+
+            const Spacer(),
             const Spacer(),
             SafeArea(
               child: OutlinedButton.icon(

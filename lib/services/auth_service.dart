@@ -1,6 +1,7 @@
 import 'package:andhealth/home_screen.dart';
 import 'package:andhealth/models/user_model.dart';
 import 'package:andhealth/providers/user_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:flutter/material.dart';
@@ -38,21 +39,35 @@ class AuthService {
     }
 
     if (user != null && context.mounted) {
-      final userModel = UserModel(
-        id: user.uid,
-        email: user.email ?? '',
-        displayName: user.displayName ?? '',
-        photoUrl: user.photoURL ?? '',
-      );
+        final docRef = FirebaseFirestore.instance
+            .collection("profiles")
+            .doc(user.uid);
+        final doc = await docRef.get();
 
-      Provider.of<UserProvider>(context, listen: false).setUser(userModel);
+        UserModel userModel;
 
-      // Navigate to home
+        if (doc.exists) {
+          userModel = UserModel.fromFirestore(doc.data()!, doc.id);
+        } else {
+          // Create profile if missing
+          userModel = UserModel(
+            id: user.uid,
+            email: user.email ?? '',
+            displayName: user.displayName ?? '',
+            photoUrl: user.photoURL ?? '',
+            startOfDay: const TimeOfDay(hour: 7, minute: 0),
+          );
+          await docRef.set(userModel.toFirestore());
+        }
+
+        Provider.of<UserProvider>(context, listen: false).setUser(userModel);
+
+        // Navigate to home
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const HomeScreen()),
         );
-    }
+      }
   } catch (e) {
     print("❌ Google Sign-In error: $e");
     if (context.mounted) {
@@ -68,15 +83,25 @@ class AuthService {
     await GoogleSignIn().signOut();
   }
 
-  UserModel? getCurrentUser() {
+  Future <UserModel?> getCurrentUser() async {
     final user = _auth.currentUser;
     if (user == null) return null;
+
+    final doc = await FirebaseFirestore.instance
+      .collection("profiles")
+      .doc(user.uid)
+      .get();
+
+    final startOfDay = doc["startOfDay"];
+
+  if (!doc.exists) return null;
 
     return UserModel(
       id: user.uid,
       email: user.email ?? '',
       displayName: user.displayName ?? '',
       photoUrl: user.photoURL ?? '',
+      startOfDay: startOfDay
     );
   }
 
