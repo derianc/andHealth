@@ -5,12 +5,22 @@ import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AuthService {
   final fb.FirebaseAuth _auth = fb.FirebaseAuth.instance;
 
   Future<void> signInWithGoogle(BuildContext context) async {
-    try {
+  try {
+    fb.User? user;
+
+    if (kIsWeb) {
+      // ---- Web: Use popup flow ----
+      final provider = fb.GoogleAuthProvider();
+      final userCredential = await fb.FirebaseAuth.instance.signInWithPopup(provider);
+      user = userCredential.user;
+    } else {
+      // ---- Mobile: Use google_sign_in plugin ----
       final googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) return;
 
@@ -21,27 +31,33 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
 
-      final userCredential = await _auth.signInWithCredential(credential);
-      final fb.User? user = userCredential.user;
+      final userCredential =
+          await fb.FirebaseAuth.instance.signInWithCredential(credential);
+      user = userCredential.user;
+    }
 
-      if (user != null && context.mounted) {
-        // Save into your provider
-        final userModel = UserModel(
-          id: user.uid,
-          email: user.email ?? '',
-          displayName: user.displayName ?? '',
-          photoUrl: user.photoURL ?? '',
-        );
+    if (user != null && context.mounted) {
+      final userModel = UserModel(
+        id: user.uid,
+        email: user.email ?? '',
+        displayName: user.displayName ?? '',
+        photoUrl: user.photoURL ?? '',
+      );
 
-        Provider.of<UserProvider>(context, listen: true).setUser(userModel);
+      Provider.of<UserProvider>(context, listen: false).setUser(userModel);
 
-        // Navigate to home
-        Navigator.pushReplacementNamed(context, '/home');
-      }
-    } catch (e) {
-      print("❌ Google Sign-In error: $e");
+      // Navigate to home
+      Navigator.pushReplacementNamed(context, '/home');
+    }
+  } catch (e) {
+    print("❌ Google Sign-In error: $e");
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Google Sign-In failed: $e")),
+      );
     }
   }
+}
 
   Future<void> signOut() async {
     await _auth.signOut();

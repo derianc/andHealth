@@ -1,0 +1,23 @@
+# Git
+.git
+.gitignore
+
+# Build outputs
+build/
+.dart_tool/
+.packages
+
+# Dependency cache
+.pub-cache/
+.pub/
+
+# OS / editor junk
+*.log
+*.swp
+*.DS_Store
+*.vscode/
+.idea/
+
+# Env files
+.env
+.env.*
